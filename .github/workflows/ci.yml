@@ -17,7 +17,7 @@ jobs:
        - name: "Install docker"
          uses: docker/setup-buildx-action@v2
        - name: "Saving kind image"
-         run: 
+         run: |
              docker pull kindest/node:v1.17.0
              docker save -o kind.v1.17.0.tar kindest/node:v1.17.0
 

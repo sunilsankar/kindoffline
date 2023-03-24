@@ -1,0 +1,29 @@
+name: Build & Release
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+       - uses: actions/checkout@v2
+       - name: "Download kind"
+         run: |
+           curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.17.0/kind-linux-amd64
+           chmod +x ./kind
+           sudo mv ./kind /usr/local/bin/kind
+       - name: "Install podman"
+         run: |
+            sudo apt install docker -y
+       
+       - name: "Saving kind image"
+         run: 
+             docker pull kindest/node:v1.17.0
+             docker save -o kind.v1.17.0.tar kindest/node:v1.17.0
+
+       - uses: actions/upload-artifact@v3
+         with:
+           name: kind
+           path: "${{ github.workspace }}/kind.v1.17.0.tar"
